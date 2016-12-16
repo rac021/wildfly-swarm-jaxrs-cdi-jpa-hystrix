@@ -18,8 +18,7 @@ public class SwarMain {
 
     public static void main(String[] args) throws Exception {
 
-        Swarm swarm = new Swarm();
-                
+        Swarm swarm = new Swarm() ;                
       
         DatasourcesFraction dataSource = new DatasourcesFraction()
                 .jdbcDriver("org.postgresql",
@@ -37,21 +36,21 @@ public class SwarMain {
                             ds.jndiName("java:jboss/datasources/Scheduler");
                         });
         
-        swarm.fraction(dataSource);
+        swarm.fraction(dataSource) ;
          
         ManagementFraction securityRealm = ManagementFraction.createDefaultFraction()
               .httpInterfaceManagementInterface((iface) -> {
-                  iface.allowedOrigin("http://localhost:8080");
-                  iface.securityRealm("ManagementRealm");
+                  iface.allowedOrigin("http://localhost:8080") ;
+                  iface.securityRealm("ManagementRealm") ;
               })
               .securityRealm("ManagementRealm", (realm) -> {
                   realm.inMemoryAuthentication((authn) -> {
-                      authn.add("rya", "rac021", true);
-                  });
+                      authn.add("rya", "rac021", true) ;
+                  }) ;
                   realm.inMemoryAuthorization((authz) -> {
-                      authz.add("rya", "admin");
-                  });
-              });
+                      authz.add("rya", "admin") ;
+                  }) ;
+              }) ;
 
         swarm.fraction(securityRealm) ;
          
@@ -71,10 +70,10 @@ public class SwarMain {
          
         swarm.start() ;
          
-        JAXRSArchive deployment = ShrinkWrap.create(JAXRSArchive.class, "my-app.war");
+        JAXRSArchive deployment = ShrinkWrap.create(JAXRSArchive.class, "my-app.war") ;
 
         deployment.addAsWebInfResource( new ClassLoaderAsset("META-INF/persistence.xml", 
-                                        SwarMain.class.getClassLoader()), "classes/META-INF/persistence.xml");
+                                        SwarMain.class.getClassLoader()), "classes/META-INF/persistence.xml") ;
         deployment.addAsWebInfResource( new ClassLoaderAsset("WEB-INF/beans.xml" , 
                                         SwarMain.class.getClassLoader()), "beans.xml" ) ;
 
@@ -83,7 +82,7 @@ public class SwarMain {
         deployment.addClass( MyPojo.class ) ;
         deployment.addClass( Hack.class ) ;
         deployment.addClass( RestApplication.class ) ;
-        deployment.addResource( CORSFilter.class );
+        deployment.addResource( CORSFilter.class ) ;
         deployment.addResource( Discover.class ) ;
        
         deployment.addAllDependencies() ;
